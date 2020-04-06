@@ -40,19 +40,19 @@ public class ClientController {
 
 
     @PostMapping
-    public ResponseEntity create(@Valid @RequestBody ClientCreateDTO clientDTO) {
-        Client client = clientDTO.convertToEntity();
+    public ResponseEntity create(@Valid @RequestBody ClientCreateDTO clientCreateDTO) {
+        Client client = clientCreateDTO.convertToEntity();
         return ResponseEntity.ok(clientService.save(client));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity update(@PathVariable Long id, @Valid @RequestBody ClientUpdateDTO clientDTO) {
+    public ResponseEntity update(@PathVariable Long id, @Valid @RequestBody ClientUpdateDTO clientUpdateDTO) {
         Optional<Client> stock = clientService.findById(id);
         if (!stock.isPresent()) {
             log.error("Id " + id + " is not existed");
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Id " + id + " is not existed");
         }
-        return ResponseEntity.ok(clientService.save(clientDTO.convertToEntity(stock.get())));
+        return ResponseEntity.ok(clientService.save(clientUpdateDTO.convertToEntity(stock.get())));
     }
 
     @DeleteMapping("/{id}")
