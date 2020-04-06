@@ -2,12 +2,17 @@ package com.techcia.security;
 
 import java.io.IOException;
 import java.util.Collections;
+import java.util.Optional;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.techcia.models.Client;
+import com.techcia.services.ClientService;
+import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -19,8 +24,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class JWTLoginFilter extends AbstractAuthenticationProcessingFilter {
 
+
+
     protected JWTLoginFilter(String url, AuthenticationManager authManager) {
         super(new AntPathRequestMatcher(url));
+
         setAuthenticationManager(authManager);
     }
 
@@ -31,6 +39,7 @@ public class JWTLoginFilter extends AbstractAuthenticationProcessingFilter {
         AccountCredentials credentials = new ObjectMapper()
                 .readValue(request.getInputStream(), AccountCredentials.class);
 
+
         return getAuthenticationManager().authenticate(
                 new UsernamePasswordAuthenticationToken(
                         credentials.getUsername(),
@@ -40,6 +49,7 @@ public class JWTLoginFilter extends AbstractAuthenticationProcessingFilter {
         );
     }
 
+    @SneakyThrows
     @Override
     protected void successfulAuthentication(
             HttpServletRequest request,

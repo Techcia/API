@@ -4,10 +4,12 @@ import com.techcia.models.Client;
 import com.techcia.services.ClientService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,15 +27,16 @@ public class ClientController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Client> findById(@PathVariable Long id) {
+    public ResponseEntity findById(@PathVariable Long id) {
         Optional<Client> stock = clientService.findById(id);
         if (!stock.isPresent()) {
             log.error("Id " + id + " is not existed");
-            ResponseEntity.badRequest().build();
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Id " + id + " is not existed");
         }
 
         return ResponseEntity.ok(stock.get());
     }
+
 
     @PostMapping
     public ResponseEntity create(@Valid @RequestBody Client client) {

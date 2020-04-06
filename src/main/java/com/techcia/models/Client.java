@@ -1,6 +1,8 @@
 package com.techcia.models;
 
 import java.util.Date;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;

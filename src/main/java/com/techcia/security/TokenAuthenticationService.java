@@ -1,11 +1,14 @@
 package com.techcia.security;
 
+import java.io.IOException;
 import java.util.Collections;
 import java.util.Date;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 
@@ -20,14 +23,20 @@ public class TokenAuthenticationService {
     static final String TOKEN_PREFIX = "Bearer";
     static final String HEADER_STRING = "Authorization";
 
-    static void addAuthentication(HttpServletResponse response, String username) {
+    static void addAuthentication(HttpServletResponse response, String username) throws IOException, JSONException {
         String JWT = Jwts.builder()
                 .setSubject(username)
                 .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
                 .signWith(SignatureAlgorithm.HS512, SECRET)
                 .compact();
 
-        response.addHeader(HEADER_STRING, TOKEN_PREFIX + " " + JWT);
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("access_token", TOKEN_PREFIX + " " + JWT);
+        response.addHeader(HEADER_STRING, JWT);
+        response.setStatus(HttpServletResponse.SC_OK);
+        response.getWriter().write(String.valueOf(jsonObject));
+        response.getWriter().flush();
+        response.getWriter().close();
     }
 
     static Authentication getAuthentication(HttpServletRequest request) {
