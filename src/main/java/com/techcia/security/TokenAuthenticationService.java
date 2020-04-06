@@ -31,8 +31,8 @@ public class TokenAuthenticationService {
                 .compact();
 
         JSONObject jsonObject = new JSONObject();
-        jsonObject.put("access_token", TOKEN_PREFIX + " " + JWT);
-        response.addHeader(HEADER_STRING, JWT);
+        jsonObject.put("access_token", JWT);
+        response.addHeader(HEADER_STRING,TOKEN_PREFIX + " " + JWT);
         response.setStatus(HttpServletResponse.SC_OK);
         response.getWriter().write(String.valueOf(jsonObject));
         response.getWriter().flush();

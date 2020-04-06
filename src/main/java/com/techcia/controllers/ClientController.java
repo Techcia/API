@@ -1,5 +1,7 @@
 package com.techcia.controllers;
 
+import com.techcia.dtos.ClientCreateDTO;
+import com.techcia.dtos.ClientUpdateDTO;
 import com.techcia.models.Client;
 import com.techcia.services.ClientService;
 import lombok.RequiredArgsConstructor;
@@ -9,7 +11,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
 
@@ -39,19 +40,19 @@ public class ClientController {
 
 
     @PostMapping
-    public ResponseEntity create(@Valid @RequestBody Client client) {
+    public ResponseEntity create(@Valid @RequestBody ClientCreateDTO clientDTO) {
+        Client client = clientDTO.convertToEntity();
         return ResponseEntity.ok(clientService.save(client));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Client> update(@PathVariable Long id, @Valid @RequestBody Client client) {
+    public ResponseEntity update(@PathVariable Long id, @Valid @RequestBody ClientUpdateDTO clientDTO) {
         Optional<Client> stock = clientService.findById(id);
         if (!stock.isPresent()) {
             log.error("Id " + id + " is not existed");
-            ResponseEntity.badRequest().build();
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Id " + id + " is not existed");
         }
-
-        return ResponseEntity.ok(clientService.save(client));
+        return ResponseEntity.ok(clientService.save(clientDTO.convertToEntity(stock.get())));
     }
 
     @DeleteMapping("/{id}")
@@ -59,11 +60,12 @@ public class ClientController {
         Optional<Client> stock = clientService.findById(id);
         if (!stock.isPresent()) {
             log.error("Id " + id + " is not existed");
-            ResponseEntity.badRequest().build();
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Id " + id + " is not existed");
         }
 
         clientService.deleteById(id);
 
         return ResponseEntity.ok().build();
     }
+
 }

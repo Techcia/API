@@ -29,4 +29,5 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
         );
         return new ResponseEntity(errorsMap.isEmpty()? ex:errorsMap, headers, status);
     }
+
 }
