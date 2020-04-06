@@ -33,7 +33,7 @@ public class ClientCreateDTO {
         client.setName(this.getName());
         client.setEmail(this.getEmail());
         client.setDocument(this.getDocument());
-        client.setTypeDocument(this.typeDocument);
+        client.setTypeDocument(this.getTypeDocument());
         client.setPassword(new BCryptPasswordEncoder().encode(this.getPassword()));
         return  client;
     }
