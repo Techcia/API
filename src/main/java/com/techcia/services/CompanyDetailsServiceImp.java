@@ -1,32 +1,33 @@
 package com.techcia.services;
 
 import com.techcia.models.Client;
+import com.techcia.models.Company;
 import com.techcia.repositories.ClientRepository;
+import com.techcia.repositories.CompanyRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.core.userdetails.User.UserBuilder;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.util.Optional;
 
 @RequiredArgsConstructor
 @Configuration
-public class ClientDetailsServiceImp implements UserDetailsService {
+public class CompanyDetailsServiceImp implements UserDetailsService {
 
-    private final ClientRepository clientRepository;
+    private final CompanyRepository companyRepository;
 
     @Override
     public UserDetails loadUserByUsername(String username) {
-        System.out.println("CLiente");
-        Optional<Client> stock = clientRepository.findByEmail(username);
-        UserBuilder builder = null;
+        System.out.println("Empresa");
+        Optional<Company> stock = companyRepository.findByEmail(username);
+        User.UserBuilder builder = null;
         if (stock.isPresent()) {
-            Client client = stock.get();
-            builder = org.springframework.security.core.userdetails.User.withUsername(username).roles("CLIENT");
-            builder.password(client.getPassword());
+            Company company = stock.get();
+            builder = org.springframework.security.core.userdetails.User.withUsername(username).roles("COMPANY");;
+            builder.password(company.getPassword());
         } else {
             throw new UsernameNotFoundException("User not found.");
         }
