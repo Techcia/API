@@ -112,7 +112,11 @@
 						<groupId>org.springframework.boot</groupId>
 						<artifactId>spring-boot-starter-data-jpa</artifactId>
 					</dependency>
-
+					<dependency>
+						<groupId>com.alibaba</groupId>
+						<artifactId>fastjson</artifactId>
+						<version>1.1.21</version>
+					</dependency>
 					<dependency>
 						<groupId>javax.validation</groupId>
 						<artifactId>validation-api</artifactId>
@@ -133,6 +137,8 @@
 						<version>0.0.20131108.vaadin1</version>
 						<scope>compile</scope>
 					</dependency>
+
+
 
 				</dependencies>
 

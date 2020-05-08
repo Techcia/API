@@ -1,10 +1,12 @@
 package com.techcia.dtos;
 
+import com.techcia.models.Company;
 import com.techcia.models.Parking;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.Column;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
 
@@ -26,9 +28,10 @@ public class ParkingCreateDTO {
     @NotNull(message = "State is required")
     private String state;
     @NotNull(message = "Number of vacancies are required")
+    @Min(1)
     private int numberOfVacancies;
 
-    public Parking convertToEntity(){
+    public Parking convertToEntity(Company company){
         Parking parking = new Parking();
         parking.setName(this.getName());
         parking.setStreet(this.getStreet());
@@ -38,6 +41,7 @@ public class ParkingCreateDTO {
         parking.setCity(this.getCity());
         parking.setState(this.getState());
         parking.setNumberOfVacancies(this.getNumberOfVacancies());
+        parking.setCompany(company);
         return parking;
     }
 }

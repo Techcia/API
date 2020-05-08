@@ -3,6 +3,7 @@ package com.techcia.models;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.DynamicUpdate;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -30,9 +31,15 @@ public class Parking {
     private String state;
     @Column(nullable = false)
     private int numberOfVacancies;
+    @Column(nullable = false)
+    private double valuePerHour;
     @CreationTimestamp
     @Column(nullable = false, updatable = false)
     private Date createTime;
+    @UpdateTimestamp
     @Column(nullable = false)
     private Date updateTime;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn (name="company_id",referencedColumnName="id",nullable=false)
+    Company company;
 }

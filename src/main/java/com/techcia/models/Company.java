@@ -6,7 +6,10 @@ import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
+import java.util.Collection;
 import java.util.Date;
+import java.util.List;
+import java.util.Set;
 
 @Entity
 @DynamicUpdate
@@ -17,7 +20,7 @@ public class Company {
     private Long id;
     @Column(unique=true, nullable=false)
     private String document;
-    @Column(nullable=false)
+    @Column(unique=true, nullable=false)
     private String email;
     @Column(unique=true, nullable=false)
     private String password;
@@ -31,4 +34,5 @@ public class Company {
     @UpdateTimestamp
     @Column(nullable=false)
     private Date updatedAt;
+
 }

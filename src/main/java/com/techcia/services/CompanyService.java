@@ -5,7 +5,6 @@ import com.techcia.repositories.CompanyRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.Id;
 import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
@@ -25,6 +24,8 @@ public class CompanyService {
     public List<Company> findAll(){
         return companyRepository.findAll();
     }
+
+    public Optional<Company> findByEmail(String email) {return companyRepository.findByEmail(email); }
 
     public Optional<Company> findById(Long id){
         return companyRepository.findById(id);

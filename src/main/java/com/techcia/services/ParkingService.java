@@ -1,5 +1,6 @@
 package com.techcia.services;
 
+import com.techcia.models.Company;
 import com.techcia.models.Parking;
 import com.techcia.repositories.ParkingRepository;
 import lombok.RequiredArgsConstructor;
@@ -31,5 +32,9 @@ public class ParkingService {
 
     public void deleteById(Long id){
         parkingRepository.deleteById(id);
+    }
+
+    public List<Parking> findByCompany(Company company){
+        return parkingRepository.findByCompany(company);
     }
 }

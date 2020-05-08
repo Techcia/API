@@ -27,7 +27,7 @@ public class Client {
     private String name;
     @Column(nullable=false)
     private String typeDocument;
-    @Column(nullable=false)
+    @Column(unique=true, nullable=false)
     private String email;
     @Column(unique=true, nullable=false)
     private String password;

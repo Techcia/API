@@ -35,6 +35,7 @@ public class ParkingUpdateDTO {
         parking.setCity(this.getCity());
         parking.setState(this.getState());
         parking.setNumberOfVacancies(this.getNumberOfVacancies());
+        parking.setCompany(parking.getCompany());
         return parking;
     }
 }

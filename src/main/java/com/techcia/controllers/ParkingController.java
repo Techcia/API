@@ -4,30 +4,43 @@ package com.techcia.controllers;
 import com.techcia.dtos.CompanyUpdateDTO;
 import com.techcia.dtos.ParkingCreateDTO;
 import com.techcia.dtos.ParkingUpdateDTO;
+import com.techcia.models.Client;
 import com.techcia.models.Company;
 import com.techcia.models.Parking;
+import com.techcia.services.ClientService;
+import com.techcia.services.CompanyService;
 import com.techcia.services.ParkingService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/parking")
+@RequestMapping("/parkings")
 @Slf4j
 
 @RequiredArgsConstructor
 public class ParkingController {
     private final ParkingService parkingService;
+    private final CompanyService companyService;
 
+    @PreAuthorize("hasRole('COMPANY')")
     @PostMapping
-    public ResponseEntity create(@Valid @RequestBody ParkingCreateDTO parkingCreateDTO){
-        Parking parking = parkingCreateDTO.convertToEntity();
+    public ResponseEntity create(@Valid @RequestBody ParkingCreateDTO parkingCreateDTO, Principal principal){
+        Optional<Company> stock = companyService.findByEmail(principal.getName());
+
+        if(!stock.isPresent()){
+            throw new UsernameNotFoundException("Invalid username or password.");
+        }
+        Parking parking = parkingCreateDTO.convertToEntity(stock.get());
         return ResponseEntity.ok(parkingService.save(parking));
     }
 
@@ -56,10 +69,10 @@ public class ParkingController {
         }
 
         parkingService.deleteById(id);
-
         return ResponseEntity.ok().build();
     }
 
+    @PreAuthorize("hasRole('COMPANY')")
     @PutMapping("/{id}")
     public ResponseEntity update(@PathVariable Long id, @Valid @RequestBody ParkingUpdateDTO parkingUpdateDTO) {
         Optional<Parking> stock = parkingService.findById(id);
@@ -68,6 +81,17 @@ public class ParkingController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Id " + id + " is not existed");
         }
         return ResponseEntity.ok(parkingService.save(parkingUpdateDTO.convertToEntity(stock.get())));
+    }
+
+    @GetMapping("/companies/{id}")
+    public ResponseEntity findByCompany(@PathVariable Long id){
+        Optional<Company> stock = companyService.findById(id);
+
+        if(!stock.isPresent()){
+            log.error("Id " + id + " is not existed");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Id " + id + " is not existed");
+        }
+        return ResponseEntity.ok(parkingService.findByCompany(stock.get()));
     }
 
 }
