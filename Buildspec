@@ -1,0 +1,6 @@
+build:
+  commands:
+      - mvn clean install
+artifacts:
+  files:
+     - target/techcia-0.0.1-SNAPSHOT.jar
