@@ -26,6 +26,8 @@ public class ParkingUpdateDTO {
     private String state;
     @NotNull(message = "Number of vacancies are required")
     private int numberOfVacancies;
+    @NotNull(message = "value per hour are required")
+    private double valuePerHour;
 
     public Parking convertToEntity(Parking parking){
 
@@ -39,6 +41,7 @@ public class ParkingUpdateDTO {
         parking.setState(this.getState());
         parking.setNumberOfVacancies(this.getNumberOfVacancies());
         parking.setCompany(parking.getCompany());
+        parking.setValuePerHour(this.valuePerHour);
         return parking;
     }
 }
