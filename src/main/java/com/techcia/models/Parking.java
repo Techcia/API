@@ -42,4 +42,5 @@ public class Parking {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn (name="company_id",referencedColumnName="id",nullable=false)
     Company company;
+
 }

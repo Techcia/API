@@ -38,7 +38,7 @@ public class ParkingController {
         Optional<Company> stock = companyService.findByEmail(principal.getName());
 
         if(!stock.isPresent()){
-            throw new UsernameNotFoundException("Invalid username or password.");
+            throw new UsernameNotFoundException("Invalid token.");
         }
         Parking parking = parkingCreateDTO.convertToEntity(stock.get());
         return ResponseEntity.ok(parkingService.save(parking));
