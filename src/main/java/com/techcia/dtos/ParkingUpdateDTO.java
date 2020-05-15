@@ -12,6 +12,8 @@ public class ParkingUpdateDTO {
     private String name;
     @NotNull(message = "Street is required")
     private String street;
+    @NotNull(message = "Phone is required")
+    private String phone;
     @NotNull(message = "Number is required")
     private int number;
     @NotNull(message = "Postal Code is required")
@@ -29,6 +31,7 @@ public class ParkingUpdateDTO {
 
         parking.setName(this.getName());
         parking.setStreet(this.getStreet());
+        parking.setPhone(this.getPhone());
         parking.setNumber(this.getNumber());
         parking.setPostalCode(this.getPostalCode());
         parking.setNeighborhood(this.getNeighborhood());

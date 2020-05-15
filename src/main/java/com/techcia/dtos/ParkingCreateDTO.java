@@ -17,6 +17,8 @@ public class ParkingCreateDTO {
     private String name;
     @NotNull(message = "Street is required")
     private String street;
+    @NotNull(message = "Phone is required")
+    private String phone;
     @NotNull(message = "Number is required")
     private int number;
     @NotNull(message = "Postal Code is required")
@@ -34,6 +36,7 @@ public class ParkingCreateDTO {
     public Parking convertToEntity(Company company){
         Parking parking = new Parking();
         parking.setName(this.getName());
+        parking.setPhone(this.getPhone());
         parking.setStreet(this.getStreet());
         parking.setNumber(this.getNumber());
         parking.setPostalCode(this.getPostalCode());
