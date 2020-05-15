@@ -35,6 +35,16 @@ public class CompanyController {
         return ResponseEntity.ok(companyService.save(company));
     }
 
+    @GetMapping("/me")
+    public ResponseEntity findMe(Principal principal){
+        Optional<Company> stock = companyService.findByEmail(principal.getName());
+
+        if(!stock.isPresent()){
+            throw new UsernameNotFoundException("Invalid username or password.");
+        }
+        return ResponseEntity.ok(stock.get());
+    }
+
     @GetMapping
     public ResponseEntity<List<Company>> findAll(){
         return ResponseEntity.ok(companyService.findAll());
