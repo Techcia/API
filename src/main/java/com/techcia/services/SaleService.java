@@ -42,6 +42,7 @@ public class SaleService {
 
     public Sale checkout(Sale sale){
         sale.setCheckout(new Date());
+        sale.setStatus(SaleConstants.FECHADO);
         return this.save(sale);
     }
 

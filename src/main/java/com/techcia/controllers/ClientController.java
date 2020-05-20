@@ -1,5 +1,6 @@
 package com.techcia.controllers;
 
+import com.techcia.config.ResponseError;
 import com.techcia.dtos.ClientCreateDTO;
 import com.techcia.dtos.ClientUpdateDTO;
 import com.techcia.models.Client;
@@ -40,7 +41,8 @@ public class ClientController {
         Optional<Client> stock = clientService.findByEmail(principal.getName());
 
         if(!stock.isPresent()){
-            throw new UsernameNotFoundException("Invalid username or password.");
+            ResponseError response = new ResponseError("Token inválido");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
         }
         return ResponseEntity.ok(stock.get());
     }
@@ -49,8 +51,8 @@ public class ClientController {
     public ResponseEntity findById(@PathVariable Long id) {
         Optional<Client> stock = clientService.findById(id);
         if (!stock.isPresent()) {
-            log.error("Id " + id + " is not existed");
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Id " + id + " is not existed");
+            ResponseError response = new ResponseError("O cliente não foi encontrado");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
         }
 
         return ResponseEntity.ok(stock.get());
@@ -67,8 +69,8 @@ public class ClientController {
     public ResponseEntity update(@PathVariable Long id, @Valid @RequestBody ClientUpdateDTO clientUpdateDTO) {
         Optional<Client> stock = clientService.findById(id);
         if (!stock.isPresent()) {
-            log.error("Id " + id + " is not existed");
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Id " + id + " is not existed");
+            ResponseError response = new ResponseError("O cliente não foi encontrado");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
         }
         return ResponseEntity.ok(clientService.save(clientUpdateDTO.convertToEntity(stock.get())));
     }
@@ -78,7 +80,8 @@ public class ClientController {
         Optional<Client> stock = clientService.findById(id);
         if (!stock.isPresent()) {
             log.error("Id " + id + " is not existed");
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Id " + id + " is not existed");
+            ResponseError response = new ResponseError("O cliente não foi encontrado");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
         }
 
         clientService.deleteById(id);

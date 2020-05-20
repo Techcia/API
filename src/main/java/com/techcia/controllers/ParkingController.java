@@ -1,6 +1,7 @@
 package com.techcia.controllers;
 
 
+import com.techcia.config.ResponseError;
 import com.techcia.dtos.CompanyUpdateDTO;
 import com.techcia.dtos.ParkingCreateDTO;
 import com.techcia.dtos.ParkingUpdateDTO;
@@ -53,8 +54,8 @@ public class ParkingController {
     public ResponseEntity findById(@PathVariable Long id){
         Optional<Parking> stock = parkingService.findById(id);
         if (!stock.isPresent()) {
-            log.error("Id " + id + " is not existed");
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Id " + id + " is not existed");
+            ResponseError response = new ResponseError("Token inválido");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
         }
 
         return ResponseEntity.ok(stock.get());
@@ -64,8 +65,8 @@ public class ParkingController {
     public ResponseEntity delete(@PathVariable Long id){
         Optional<Parking> stock = parkingService.findById(id);
         if (!stock.isPresent()) {
-            log.error("Id " + id + " is not existed");
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Id " + id + " is not existed");
+            ResponseError response = new ResponseError("O estacionamento não foi encontrada");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
         }
 
         parkingService.deleteById(id);
@@ -77,8 +78,8 @@ public class ParkingController {
     public ResponseEntity update(@PathVariable Long id, @Valid @RequestBody ParkingUpdateDTO parkingUpdateDTO) {
         Optional<Parking> stock = parkingService.findById(id);
         if (!stock.isPresent()) {
-            log.error("Id " + id + " is not existed");
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Id " + id + " is not existed");
+            ResponseError response = new ResponseError("O estacionamento não foi encontrada");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
         }
         return ResponseEntity.ok(parkingService.save(parkingUpdateDTO.convertToEntity(stock.get())));
     }
@@ -88,8 +89,8 @@ public class ParkingController {
         Optional<Company> stock = companyService.findById(id);
 
         if(!stock.isPresent()){
-            log.error("Id " + id + " is not existed");
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Id " + id + " is not existed");
+            ResponseError response = new ResponseError("O estacionamento não foi encontrada");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
         }
         return ResponseEntity.ok(parkingService.findByCompany(stock.get()));
     }

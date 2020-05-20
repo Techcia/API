@@ -1,5 +1,6 @@
 package com.techcia.controllers;
 
+import com.techcia.config.ResponseError;
 import com.techcia.dtos.ClientUpdateDTO;
 import com.techcia.dtos.CompanyCreateDTO;
 import com.techcia.dtos.CompanyUpdateDTO;
@@ -40,7 +41,8 @@ public class CompanyController {
         Optional<Company> stock = companyService.findByEmail(principal.getName());
 
         if(!stock.isPresent()){
-            throw new UsernameNotFoundException("Invalid username or password.");
+            ResponseError response = new ResponseError("Token inválido");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
         }
         return ResponseEntity.ok(stock.get());
     }
@@ -55,7 +57,8 @@ public class CompanyController {
         Optional<Company> stock = companyService.findByEmail(principal.getName());
 
         if(!stock.isPresent()){
-            throw new UsernameNotFoundException("Invalid username or password.");
+            ResponseError response = new ResponseError("Token inválido");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
         }
         return ResponseEntity.ok(parkingService.findByCompany(stock.get()));
     }
@@ -64,8 +67,8 @@ public class CompanyController {
     public ResponseEntity findById(@PathVariable Long id){
         Optional<Company> stock = companyService.findById(id);
         if (!stock.isPresent()) {
-            log.error("Id " + id + " is not existed");
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Id " + id + " is not existed");
+            ResponseError response = new ResponseError("A empresa não foi encontrada");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
         }
 
         return ResponseEntity.ok(stock.get());
@@ -75,8 +78,8 @@ public class CompanyController {
     public ResponseEntity delete(@PathVariable Long id){
         Optional<Company> stock = companyService.findById(id);
         if (!stock.isPresent()) {
-            log.error("Id " + id + " is not existed");
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Id " + id + " is not existed");
+            ResponseError response = new ResponseError("A empresa não foi encontrada");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
         }
 
         companyService.deleteById(id);
@@ -88,8 +91,8 @@ public class CompanyController {
     public ResponseEntity update(@PathVariable Long id, @Valid @RequestBody CompanyUpdateDTO companyUpdateDTO) {
         Optional<Company> stock = companyService.findById(id);
         if (!stock.isPresent()) {
-            log.error("Id " + id + " is not existed");
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Id " + id + " is not existed");
+            ResponseError response = new ResponseError("A empresa não foi encontrada");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
         }
         return ResponseEntity.ok(companyService.save(companyUpdateDTO.convertToEntity(stock.get())));
     }

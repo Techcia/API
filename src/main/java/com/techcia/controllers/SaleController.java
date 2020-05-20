@@ -1,5 +1,6 @@
 package com.techcia.controllers;
 
+import com.techcia.config.ResponseError;
 import com.techcia.constants.SaleConstants;
 import com.techcia.dtos.SaleCheckinDTO;
 import com.techcia.models.Client;
@@ -37,12 +38,14 @@ public class SaleController {
     public ResponseEntity checkin(@Valid @RequestBody SaleCheckinDTO saleCheckinDTO, Principal principal){
         Optional<Client> stockClient = clientService.findByEmail(principal.getName());
         if(!stockClient.isPresent()){
-            throw new UsernameNotFoundException("Invalid token");
+            ResponseError response = new ResponseError("Token inválido");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
         }
 
         Optional<Parking> stockParking = parkingService.findById(saleCheckinDTO.getParkingId());
         if(!stockParking.isPresent()){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Id Parking " + saleCheckinDTO.getParkingId() + " is not existed");
+            ResponseError response = new ResponseError("O estacionamento não encontrado");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
         }
 
         Sale sale = saleCheckinDTO.convertToEntity(stockClient.get(), stockParking.get());
@@ -54,11 +57,17 @@ public class SaleController {
     public ResponseEntity generatePay(@PathVariable Long id, Principal principal){
         Optional<Sale> stockSale = saleService.findById(id);
         if(!stockSale.isPresent()){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Id " + id + " is not existed");
+            ResponseError response = new ResponseError("O ticket não foi encontrado");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
         }
         Sale sale = stockSale.get();
-        if(!sale.getStatus().equals(SaleConstants.ABERTO)){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("O status do ticket está fechado");
+        if(sale.getStatus().equals(SaleConstants.FECHADO)){
+            ResponseError response = new ResponseError("O ticket já realizou checkout");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+        }
+        if(sale.getStatus().equals(SaleConstants.PAGO)){
+            ResponseError response = new ResponseError("O ticket já se encontra pago");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
         }
         return ResponseEntity.ok(saleService.generatePay(sale));
     }
@@ -68,11 +77,17 @@ public class SaleController {
     public ResponseEntity pay(@PathVariable Long id, Principal principal){
         Optional<Sale> stockSale = saleService.findById(id);
         if(!stockSale.isPresent()){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Id " + id + " is not existed");
+            ResponseError response = new ResponseError("O ticket não foi encontrado");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
         }
         Sale sale = stockSale.get();
-        if(!sale.getStatus().equals(SaleConstants.ABERTO)){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("O status do ticket está fechado");
+        if(sale.getStatus().equals(SaleConstants.FECHADO)){
+            ResponseError response = new ResponseError("O ticket já realizou checkout");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+        }
+        if(sale.getStatus().equals(SaleConstants.PAGO)){
+            ResponseError response = new ResponseError("O ticket já se encontra pago");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
         }
         return ResponseEntity.ok(saleService.pay(sale));
     }
@@ -82,11 +97,17 @@ public class SaleController {
     public ResponseEntity checkout(@PathVariable Long id, Principal principal){
         Optional<Sale> stockSale = saleService.findById(id);
         if(!stockSale.isPresent()){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Id " + id + " is not existed");
+            ResponseError response = new ResponseError("O ticket não foi encontrado");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
         }
         Sale sale = stockSale.get();
-        if(!sale.getStatus().equals(SaleConstants.PAGO)){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("The sale is not paid");
+        if(sale.getStatus().equals(SaleConstants.ABERTO)){
+            ResponseError response = new ResponseError("O ticket não está pago");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+        }
+        if(sale.getStatus().equals(SaleConstants.FECHADO)){
+            ResponseError response = new ResponseError("O ticket já realizou checkout");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
         }
         return ResponseEntity.ok(saleService.checkout(sale));
     }
@@ -100,8 +121,8 @@ public class SaleController {
     public ResponseEntity findById(@PathVariable Long id){
         Optional<Sale> stock = saleService.findById(id);
         if (!stock.isPresent()) {
-            log.error("Id " + id + " is not existed");
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Id " + id + " is not existed");
+            ResponseError response = new ResponseError("O ticket não foi encontrado");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
         }
 
         return ResponseEntity.ok(stock.get());
@@ -111,8 +132,8 @@ public class SaleController {
     public ResponseEntity delete(@PathVariable Long id){
         Optional<Sale> stock = saleService.findById(id);
         if (!stock.isPresent()) {
-            log.error("Id " + id + " is not existed");
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Id " + id + " is not existed");
+            ResponseError response = new ResponseError("O ticket não foi encontrado");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
         }
 
         saleService.deleteById(id);
