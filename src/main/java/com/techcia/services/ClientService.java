@@ -1,6 +1,7 @@
 package com.techcia.services;
 
 import com.techcia.models.Client;
+import com.techcia.models.Sale;
 import com.techcia.repositories.ClientRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -37,6 +38,5 @@ public class ClientService {
     public void deleteById(Long id) {
         clientRepository.deleteById(id);
     }
-
 
 }

@@ -19,12 +19,6 @@ public class Sale {
     private Double value;
     @Column(nullable=false)
     private String status;
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn (name="parking_id",referencedColumnName="id",nullable=false)
-    Parking parking;
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn (name="client_id",referencedColumnName="id",nullable=false)
-    Client client;
     @CreationTimestamp
     @Column(nullable=false, updatable = false)
     private Date checkin;
@@ -32,4 +26,10 @@ public class Sale {
     private Date dataPay;
     @Column()
     private Date checkout;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn (name="parking_id",referencedColumnName="id",nullable=false)
+    Parking parking;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn (name="client_id",referencedColumnName="id",nullable=false)
+    Client client;
 }

@@ -1,6 +1,7 @@
 package com.techcia.services;
 
 import com.techcia.constants.SaleConstants;
+import com.techcia.models.Client;
 import com.techcia.models.Sale;
 import com.techcia.repositories.SaleRepository;
 import lombok.RequiredArgsConstructor;
@@ -28,6 +29,10 @@ public class SaleService {
     public Optional<Sale> findById(Long id) {return saleRepository.findById(id);}
 
     public void deleteById(Long id) {saleRepository.deleteById(id);}
+
+    public List<Sale> findByClient(Client client){
+        return saleRepository.findByClient(client);
+    }
 
     public Sale generatePay(Sale sale){
         sale.setDataPay(new Date());

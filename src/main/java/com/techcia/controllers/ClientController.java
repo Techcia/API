@@ -7,6 +7,7 @@ import com.techcia.models.Client;
 import com.techcia.models.Company;
 import com.techcia.security.AccountCredentials;
 import com.techcia.services.ClientService;
+import com.techcia.services.SaleService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.tomcat.util.net.openssl.ciphers.Authentication;
@@ -30,6 +31,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class ClientController {
     private final ClientService clientService;
+    private final SaleService saleService;
 
     @GetMapping
     public ResponseEntity<List<Client>> findAll() {
@@ -75,6 +77,7 @@ public class ClientController {
         return ResponseEntity.ok(clientService.save(clientUpdateDTO.convertToEntity(stock.get())));
     }
 
+
     @DeleteMapping("/{id}")
     public ResponseEntity delete(@PathVariable Long id) {
         Optional<Client> stock = clientService.findById(id);
@@ -85,8 +88,17 @@ public class ClientController {
         }
 
         clientService.deleteById(id);
-
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/sales")
+    public ResponseEntity findByClient(Principal principal){
+        Optional<Client> stock = clientService.findByEmail(principal.getName());
+        if(!stock.isPresent()){
+            ResponseError response = new ResponseError("Token inválido");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+        }
+        return ResponseEntity.ok(saleService.findByClient(stock.get()));
     }
 
 
