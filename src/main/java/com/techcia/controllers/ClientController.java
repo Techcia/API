@@ -13,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.tomcat.util.net.openssl.ciphers.Authentication;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -91,6 +92,7 @@ public class ClientController {
         return ResponseEntity.ok().build();
     }
 
+    @PreAuthorize("hasRole('CLIENT')")
     @GetMapping("/sales")
     public ResponseEntity findByClient(Principal principal){
         Optional<Client> stock = clientService.findByEmail(principal.getName());
