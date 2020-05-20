@@ -54,7 +54,7 @@ public class SaleService {
         long difference = finalDate.getTimeInMillis() - initialDate.getTimeInMillis();
         long differenceInHours = difference / (60 * 60 * 1000);
         double differ = Double.parseDouble(decimalFormat.format(differenceInHours));
-        Double value = (sale.getParking().getValuePerHour() * differ) + 1;
+        Double value = ((sale.getParking().getValuePerHour() * differ) + 1) * sale.getParking().getValuePerHour();
         return value;
     }
 }

@@ -57,6 +57,9 @@ public class SaleController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Id " + id + " is not existed");
         }
         Sale sale = stockSale.get();
+        if(!sale.getStatus().equals(SaleConstants.ABERTO)){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("O status do ticket está fechado");
+        }
         return ResponseEntity.ok(saleService.generatePay(sale));
     }
 
@@ -68,6 +71,9 @@ public class SaleController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Id " + id + " is not existed");
         }
         Sale sale = stockSale.get();
+        if(!sale.getStatus().equals(SaleConstants.ABERTO)){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("O status do ticket está fechado");
+        }
         return ResponseEntity.ok(saleService.pay(sale));
     }
 
