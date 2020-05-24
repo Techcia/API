@@ -74,6 +74,11 @@
             <version>0.0.20131108.vaadin1</version>
             <scope>compile</scope>
         </dependency>
+		<dependency>
+			<groupId> com.mercadopago </groupId>
+			<artifactId> dx-java </artifactId>
+			<version> 1.0.33 </version>
+		</dependency>
 
     </dependencies>
 

@@ -1,7 +1,13 @@
 package com.techcia.controllers;
 
+import com.mercadopago.MercadoPago;
+import com.mercadopago.exceptions.MPConfException;
+import com.mercadopago.exceptions.MPException;
+import com.mercadopago.resources.Payment;
+import com.mercadopago.resources.datastructures.payment.Payer;
 import com.techcia.config.ResponseError;
 import com.techcia.constants.SaleConstants;
+import com.techcia.dtos.PaymentDTO;
 import com.techcia.dtos.SaleCheckinDTO;
 import com.techcia.models.Client;
 import com.techcia.models.Parking;
@@ -87,6 +93,36 @@ public class SaleController {
         }
         if(sale.getStatus().equals(SaleConstants.PAGO)){
             ResponseError response = new ResponseError("O ticket já se encontra pago");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+        }
+        return ResponseEntity.ok(saleService.pay(sale));
+    }
+
+    @PreAuthorize("hasRole('CLIENT')")
+    @PostMapping("/pay/{id}")
+    public ResponseEntity payment(@Valid @RequestBody PaymentDTO paymentDTO, @PathVariable Long id) throws MPException {
+        Optional<Sale> stockSale = saleService.findById(id);
+        if(!stockSale.isPresent()){
+            ResponseError response = new ResponseError("O ticket não foi encontrado");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+        }
+        Sale sale = stockSale.get();
+        if(sale.getStatus().equals(SaleConstants.FECHADO)){
+            ResponseError response = new ResponseError("O ticket já realizou checkout");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+        }
+        if(sale.getStatus().equals(SaleConstants.PAGO)){
+            ResponseError response = new ResponseError("O ticket já se encontra pago");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+        }
+
+        MercadoPago.SDK.setAccessToken("ENV_ACCESS_TOKEN");
+
+        Payment payment = paymentDTO.convertToEntity();
+
+        payment.save();
+        if(!payment.getStatus().equals("approved")){
+            ResponseError response = new ResponseError("O cartão foi recusado");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
         }
         return ResponseEntity.ok(saleService.pay(sale));
