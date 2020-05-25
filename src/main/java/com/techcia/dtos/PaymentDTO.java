@@ -1,5 +1,5 @@
 package com.techcia.dtos;
-
+import com.mercadopago.*;
 import com.mercadopago.resources.Payment;
 import com.mercadopago.resources.datastructures.payment.Payer;
 import lombok.Data;

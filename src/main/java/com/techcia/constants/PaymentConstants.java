@@ -1,5 +1,5 @@
 package com.techcia.constants;
 
 public class PaymentConstants {
-    private static final String ENV_ACCESS_TOKEN  = "TEST-3857643372912665-052204-7de9a7642db5d6a83da94c5ba048fcc5-463408128";
+    public static final String ENV_ACCESS_TOKEN  = "TEST-3857643372912665-052500-dd48c9f0950e6ce030a47e62de7cd4b6-463408128";
 }
