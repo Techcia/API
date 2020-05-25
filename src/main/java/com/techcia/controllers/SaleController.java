@@ -78,25 +78,6 @@ public class SaleController {
         return ResponseEntity.ok(saleService.generatePay(sale));
     }
 
-    @PreAuthorize("hasRole('CLIENT')")
-    @GetMapping("/pay/{id}")
-    public ResponseEntity pay(@PathVariable Long id, Principal principal){
-        Optional<Sale> stockSale = saleService.findById(id);
-        if(!stockSale.isPresent()){
-            ResponseError response = new ResponseError("O ticket não foi encontrado");
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
-        }
-        Sale sale = stockSale.get();
-        if(sale.getStatus().equals(SaleConstants.FECHADO)){
-            ResponseError response = new ResponseError("O ticket já realizou checkout");
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
-        }
-        if(sale.getStatus().equals(SaleConstants.PAGO)){
-            ResponseError response = new ResponseError("O ticket já se encontra pago");
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
-        }
-        return ResponseEntity.ok(saleService.pay(sale));
-    }
 
     @PreAuthorize("hasRole('CLIENT')")
     @PostMapping("/pay/{id}")
