@@ -97,12 +97,9 @@ public class SaleController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
         }
 
-        MercadoPago.SDK.setAccessToken("TEST-3857643372912665-052500-dd48c9f0950e6ce030a47e62de7cd4b6-463408128");
-
+        MercadoPago.SDK.setAccessToken(PaymentConstants.ENV_ACCESS_TOKEN);
         Payment payment = paymentDTO.convertToEntity();
-
         payment.save();
-        System.out.println(payment.getStatus());
         if(payment.getStatus() == null){
             ResponseError response = new ResponseError("O cartão foi recusado");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
