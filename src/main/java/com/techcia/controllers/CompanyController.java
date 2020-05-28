@@ -52,17 +52,6 @@ public class CompanyController {
         return ResponseEntity.ok(companyService.findAll());
     }
 
-    @GetMapping("/parkings")
-    public ResponseEntity findParkingsByCompany(Principal principal){
-        Optional<Company> stock = companyService.findByEmail(principal.getName());
-
-        if(!stock.isPresent()){
-            ResponseError response = new ResponseError("Token inválido");
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
-        }
-        return ResponseEntity.ok(parkingService.findByCompany(stock.get()));
-    }
-
     @GetMapping("/{id}")
     public ResponseEntity findById(@PathVariable Long id){
         Optional<Company> stock = companyService.findById(id);

@@ -32,7 +32,6 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class ClientController {
     private final ClientService clientService;
-    private final SaleService saleService;
 
     @GetMapping
     public ResponseEntity<List<Client>> findAll() {
@@ -92,16 +91,7 @@ public class ClientController {
         return ResponseEntity.ok().build();
     }
 
-    @PreAuthorize("hasRole('CLIENT')")
-    @GetMapping("/sales")
-    public ResponseEntity findByClient(Principal principal){
-        Optional<Client> stock = clientService.findByEmail(principal.getName());
-        if(!stock.isPresent()){
-            ResponseError response = new ResponseError("Token inválido");
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
-        }
-        return ResponseEntity.ok(saleService.findByClient(stock.get()));
-    }
+
 
 
 }

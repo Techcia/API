@@ -95,4 +95,15 @@ public class ParkingController {
         return ResponseEntity.ok(parkingService.findByCompany(stock.get()));
     }
 
+    @GetMapping("/company")
+    public ResponseEntity findByCompany(Principal principal){
+        Optional<Company> stock = companyService.findByEmail(principal.getName());
+
+        if(!stock.isPresent()){
+            ResponseError response = new ResponseError("Token inválido");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+        }
+        return ResponseEntity.ok(parkingService.findByCompany(stock.get()));
+    }
+
 }

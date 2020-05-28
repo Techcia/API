@@ -11,9 +11,11 @@ import com.techcia.constants.SaleConstants;
 import com.techcia.dtos.PaymentDTO;
 import com.techcia.dtos.SaleCheckinDTO;
 import com.techcia.models.Client;
+import com.techcia.models.Company;
 import com.techcia.models.Parking;
 import com.techcia.models.Sale;
 import com.techcia.services.ClientService;
+import com.techcia.services.CompanyService;
 import com.techcia.services.ParkingService;
 import com.techcia.services.SaleService;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +27,9 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.security.Principal;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -37,6 +42,7 @@ import java.util.Optional;
 public class SaleController {
     private final SaleService saleService;
     private final ClientService clientService;
+    private final CompanyService companyService;
     private final ParkingService parkingService;
 
     @PreAuthorize("hasRole('CLIENT')")
@@ -156,7 +162,17 @@ public class SaleController {
         }
 
         saleService.deleteById(id);
-
         return ResponseEntity.ok().build();
+    }
+
+    @PreAuthorize("hasRole('CLIENT')")
+    @GetMapping("/client")
+    public ResponseEntity findByClient(Principal principal){
+        Optional<Client> stock = clientService.findByEmail(principal.getName());
+        if(!stock.isPresent()){
+            ResponseError response = new ResponseError("Token inválido");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+        }
+        return ResponseEntity.ok(saleService.findByClient(stock.get()));
     }
 }

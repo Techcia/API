@@ -2,6 +2,7 @@ package com.techcia.services;
 
 import com.techcia.constants.SaleConstants;
 import com.techcia.models.Client;
+import com.techcia.models.Company;
 import com.techcia.models.Sale;
 import com.techcia.repositories.SaleRepository;
 import lombok.RequiredArgsConstructor;
@@ -62,5 +63,9 @@ public class SaleService {
         double differ = Double.parseDouble(decimalFormat.format(differenceInHours));
         Double value = (differ + 1) * sale.getParking().getValuePerHour();
         return value;
+    }
+
+    public List<Sale> findByCompanyByDate(Company company,Date initialDate, Date finalDate){
+        return saleRepository.findByCompanyByDate(company.getId(),initialDate, finalDate);
     }
 }
