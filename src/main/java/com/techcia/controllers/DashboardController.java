@@ -21,6 +21,7 @@ import java.security.Principal;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.Instant;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -46,10 +47,11 @@ public class DashboardController {
             ResponseError response = new ResponseError("Token inválido");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
         }
-        DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
-        Date initialDate = df.parse(initialD);
-        Date finalDate = df.parse(finalD);
-        List<Sale> sales = saleService.findByCompanyByDate(stock.get(), initialDate, finalDate);
+        Instant instantInitial = Instant.parse( initialD );
+        Date dateInitial = Date.from( instantInitial ) ;
+        Instant instantFinal = Instant.parse( finalD );
+        Date dateFinal = Date.from( instantFinal ) ;
+        List<Sale> sales = saleService.findByCompanyByDate(stock.get(), dateInitial, dateFinal);
         return ResponseEntity.ok(dashboardService.dashboardSales(sales));
     }
 }
