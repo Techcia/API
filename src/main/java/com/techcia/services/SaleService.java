@@ -3,6 +3,7 @@ package com.techcia.services;
 import com.techcia.constants.SaleConstants;
 import com.techcia.models.Client;
 import com.techcia.models.Company;
+import com.techcia.models.Parking;
 import com.techcia.models.Sale;
 import com.techcia.repositories.SaleRepository;
 import lombok.RequiredArgsConstructor;
@@ -65,7 +66,7 @@ public class SaleService {
         return value;
     }
 
-    public List<Sale> findByCompanyByDate(Company company,Date initialDate, Date finalDate){
-        return saleRepository.findByCompanyByDate(company.getId(),initialDate, finalDate);
+    public List<Sale> findByParkingByDate(Parking parking, Date initialDate, Date finalDate){
+        return saleRepository.findByParkingByDate(parking.getId(),initialDate, finalDate);
     }
 }

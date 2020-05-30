@@ -1,9 +1,7 @@
 package com.techcia.controllers;
 
 import com.techcia.config.ResponseError;
-import com.techcia.dtos.DashboardSale;
 import com.techcia.models.Company;
-import com.techcia.models.Sale;
 import com.techcia.services.CompanyService;
 import com.techcia.services.DashboardService;
 import com.techcia.services.SaleService;
@@ -18,12 +16,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.security.Principal;
-import java.text.DateFormat;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.util.Date;
-import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -51,7 +46,7 @@ public class DashboardController {
         Date dateInitial = Date.from( instantInitial ) ;
         Instant instantFinal = Instant.parse( finalD );
         Date dateFinal = Date.from( instantFinal ) ;
-        List<Sale> sales = saleService.findByCompanyByDate(stock.get(), dateInitial, dateFinal);
-        return ResponseEntity.ok(dashboardService.dashboardSales(sales));
+//        List<Sale> sales = saleService.findByCompanyByDate(stock.get(), dateInitial, dateFinal);
+        return ResponseEntity.ok(dashboardService.dashboardSales(stock.get(), dateInitial, dateFinal));
     }
 }

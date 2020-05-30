@@ -17,8 +17,6 @@ public interface SaleRepository extends JpaRepository<Sale, Long> {
     List<Sale> findByClient(Client client);
 
     @Query(value = "SELECT s.* FROM sale s\n" +
-            "INNER JOIN parking p ON p.id = s.parking_id\n" +
-            "INNER JOIN company c ON c.id = p.company_id\n" +
-            "WHERE c.id = :companyId AND s.checkin >= :initialDate AND s.checkout <= :finalDate", nativeQuery = true)
-    List<Sale> findByCompanyByDate(@Param("companyId") Long companyId, @Param("initialDate") Date initialDate,  @Param("finalDate") Date finalDate);
+            "WHERE parking_id = :parkingId AND s.checkin >= :initialDate AND s.checkout <= :finalDate", nativeQuery = true)
+    List<Sale> findByParkingByDate(@Param("parkingId") Long parkingId, @Param("initialDate") Date initialDate,  @Param("finalDate") Date finalDate);
 }
