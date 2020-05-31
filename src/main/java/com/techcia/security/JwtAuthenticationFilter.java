@@ -1,5 +1,6 @@
 package com.techcia.security;
 
+import com.techcia.services.AdminDetailsServiceImp;
 import com.techcia.services.ClientDetailsServiceImp;
 import com.techcia.services.CompanyDetailsServiceImp;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -31,6 +32,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private CompanyDetailsServiceImp companyDetailsServiceImp;
 
     @Autowired
+    private AdminDetailsServiceImp adminDetailsServiceImp;
+
+    @Autowired
     private TokenProvider jwtTokenUtil;
 
     @Override
@@ -58,8 +62,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             UserDetails userDetails;
             if(role.equals("ROLE_CLIENT")){
                userDetails  = clientDetailsServiceImp.loadUserByUsername(username);
-            }else{
+            }else if(role.equals("ROLE_COMPANY")){
                 userDetails  = companyDetailsServiceImp.loadUserByUsername(username);
+            }else{
+                userDetails  = adminDetailsServiceImp.loadUserByUsername(username);
             }
 
 

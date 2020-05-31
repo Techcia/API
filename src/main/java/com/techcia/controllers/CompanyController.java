@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,8 +29,8 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class CompanyController {
     private final CompanyService companyService;
-    private final ParkingService parkingService;
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     public ResponseEntity create(@Valid @RequestBody CompanyCreateDTO companyCreateDTO){
         Company company = companyCreateDTO.convertToEntity();
@@ -63,6 +64,7 @@ public class CompanyController {
         return ResponseEntity.ok(stock.get());
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity delete(@PathVariable Long id){
         Optional<Company> stock = companyService.findById(id);

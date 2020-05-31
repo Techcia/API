@@ -1,5 +1,6 @@
 package com.techcia.security;
 
+import com.techcia.services.AdminDetailsServiceImp;
 import com.techcia.services.ClientDetailsServiceImp;
 import com.techcia.services.CompanyDetailsServiceImp;
 import lombok.RequiredArgsConstructor;
@@ -34,6 +35,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final ClientDetailsServiceImp clientDetailsServiceImp;
     private final CompanyDetailsServiceImp companyDetailsServiceImp;
+    private final AdminDetailsServiceImp adminDetailsServiceImp;
     private final JwtAuthenticationEntryPoint unauthorizedHandler;
 
 
@@ -50,6 +52,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/home").permitAll()
                 .antMatchers(HttpMethod.POST,"/clients").permitAll()
                 .antMatchers(HttpMethod.POST,"/companies").permitAll()
+                .antMatchers(HttpMethod.POST,"/admin").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()

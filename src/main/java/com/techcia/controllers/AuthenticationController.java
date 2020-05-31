@@ -3,6 +3,7 @@ package com.techcia.controllers;
 import com.techcia.security.AccountCredentials;
 import com.techcia.security.AuthToken;
 import com.techcia.security.TokenProvider;
+import com.techcia.services.AdminDetailsServiceImp;
 import com.techcia.services.ClientDetailsServiceImp;
 import com.techcia.services.CompanyDetailsServiceImp;
 import lombok.RequiredArgsConstructor;
@@ -26,6 +27,7 @@ public class AuthenticationController {
 
     private final ClientDetailsServiceImp clientDetailsServiceImp;
     private final CompanyDetailsServiceImp companyDetailsServiceImp;
+    private final AdminDetailsServiceImp adminDetailsServiceImp;
     private final TokenProvider tokenProvider;
     BCryptPasswordEncoder bcrypt= new BCryptPasswordEncoder();
 
@@ -47,6 +49,18 @@ public class AuthenticationController {
     @RequestMapping(value = "/company", method = RequestMethod.POST)
     public ResponseEntity<?> registerCompany(@RequestBody AccountCredentials loginUser) throws AuthenticationException {
         UserDetails user = companyDetailsServiceImp.loadUserByUsername(loginUser.getUsername());
+
+        boolean isPasswordMatches= bcrypt.matches(loginUser.getPassword(), user.getPassword());
+        if(!isPasswordMatches){
+            throw new UsernameNotFoundException("Invalid username or password.");
+        }
+        final String token = jwtTokenUtil.generateToken(user);
+        return ResponseEntity.ok(new AuthToken(token));
+    }
+
+    @RequestMapping(value = "/admin", method = RequestMethod.POST)
+    public ResponseEntity<?> registerAdmin(@RequestBody AccountCredentials loginUser) throws AuthenticationException {
+        UserDetails user = adminDetailsServiceImp.loadUserByUsername(loginUser.getUsername());
 
         boolean isPasswordMatches= bcrypt.matches(loginUser.getPassword(), user.getPassword());
         if(!isPasswordMatches){
