@@ -47,7 +47,8 @@ public class CompanyController {
         }
         return ResponseEntity.ok(stock.get());
     }
-
+    
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping
     public ResponseEntity<List<Company>> findAll(){
         return ResponseEntity.ok(companyService.findAll());
