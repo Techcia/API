@@ -14,7 +14,7 @@ import java.util.Optional;
 public interface SaleRepository extends JpaRepository<Sale, Long> {
     Optional<Sale> findById(Long id);
 
-    List<Sale> findByClient(Client client);
+    List<Sale> findByClientOrderByIdDesc(Client client);
 
     @Query(value = "SELECT id, s.value as 'value', s.data_pay, s.checkin, s.checkout, s.client_id, s.parking_id, s.status FROM sale s\n" +
             "WHERE parking_id = :parkingId AND s.checkin >= :initialDate AND s.checkout <= :finalDate", nativeQuery = true)

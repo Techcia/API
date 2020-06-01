@@ -33,7 +33,7 @@ public class SaleService {
     public void deleteById(Long id) {saleRepository.deleteById(id);}
 
     public List<Sale> findByClient(Client client){
-        return saleRepository.findByClient(client);
+        return saleRepository.findByClientOrderByIdDesc(client);
     }
 
     public Sale generatePay(Sale sale){
