@@ -17,6 +17,6 @@ public interface SaleRepository extends JpaRepository<Sale, Long> {
     List<Sale> findByClient(Client client);
 
     @Query(value = "SELECT id, sum(s.value) as 'value', s.data_pay, s.checkin, s.checkout, s.client_id, s.parking_id, s.status FROM sale s\n" +
-            "WHERE parking_id = :parkingId AND s.checkin >= :initialDate AND s.checkout <= :finalDate GROUP BY YEAR(s.checkin), MONTH(s.checkin), DAY(s.checkin)", nativeQuery = true)
+            "WHERE parking_id = :parkingId AND s.checkin >= :initialDate AND s.checkout <= :finalDate", nativeQuery = true)
     List<Sale> findByParkingByDate(@Param("parkingId") Long parkingId, @Param("initialDate") Date initialDate,  @Param("finalDate") Date finalDate);
 }
