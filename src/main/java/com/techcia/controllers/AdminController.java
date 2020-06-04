@@ -1,9 +1,7 @@
 package com.techcia.controllers;
 
-import com.techcia.dtos.AdminCreateDto;
-import com.techcia.dtos.ClientCreateDTO;
+import com.techcia.dtos.admin.AdminCreateDto;
 import com.techcia.models.Admin;
-import com.techcia.models.Client;
 import com.techcia.services.AdminService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

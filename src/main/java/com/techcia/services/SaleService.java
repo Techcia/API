@@ -11,10 +11,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.text.DecimalFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 
@@ -53,7 +50,7 @@ public class SaleService {
         return this.save(sale);
     }
 
-    public Double calculateValue(Sale sale){
+    private Double calculateValue(Sale sale){
         DecimalFormat decimalFormat = new DecimalFormat("0");
         Calendar initialDate = Calendar.getInstance();
         initialDate.setTime(sale.getCheckin());
@@ -68,5 +65,9 @@ public class SaleService {
 
     public List<Sale> findByParkingByDate(Parking parking, Date initialDate, Date finalDate){
         return saleRepository.findByParkingByDate(parking.getId(),initialDate, finalDate);
+    }
+
+    public Map<String, Object> countAndSumValueSales(Company company, Date initialDate, Date finalDate){
+        return saleRepository.countAndSumValueSales(company.getId(), initialDate, finalDate);
     }
 }

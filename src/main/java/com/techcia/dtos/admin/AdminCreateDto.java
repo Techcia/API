@@ -1,7 +1,6 @@
-package com.techcia.dtos;
+package com.techcia.dtos.admin;
 
 import com.techcia.models.Admin;
-import com.techcia.models.Client;
 import lombok.Data;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 

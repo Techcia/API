@@ -1,4 +1,4 @@
-package com.techcia.dtos;
+package com.techcia.dtos.sales;
 
 import com.techcia.constants.SaleConstants;
 import com.techcia.models.Client;

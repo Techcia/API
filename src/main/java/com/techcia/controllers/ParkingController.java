@@ -2,13 +2,10 @@ package com.techcia.controllers;
 
 
 import com.techcia.config.ResponseError;
-import com.techcia.dtos.CompanyUpdateDTO;
-import com.techcia.dtos.ParkingCreateDTO;
-import com.techcia.dtos.ParkingUpdateDTO;
-import com.techcia.models.Client;
+import com.techcia.dtos.parking.ParkingCreateDTO;
+import com.techcia.dtos.parking.ParkingUpdateDTO;
 import com.techcia.models.Company;
 import com.techcia.models.Parking;
-import com.techcia.services.ClientService;
 import com.techcia.services.CompanyService;
 import com.techcia.services.ParkingService;
 import lombok.RequiredArgsConstructor;

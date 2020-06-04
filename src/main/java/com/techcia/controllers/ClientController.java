@@ -1,25 +1,16 @@
 package com.techcia.controllers;
 
 import com.techcia.config.ResponseError;
-import com.techcia.dtos.ClientCreateDTO;
-import com.techcia.dtos.ClientUpdateDTO;
+import com.techcia.dtos.client.ClientCreateDTO;
+import com.techcia.dtos.client.ClientUpdateDTO;
 import com.techcia.models.Client;
-import com.techcia.models.Company;
-import com.techcia.security.AccountCredentials;
 import com.techcia.services.ClientService;
-import com.techcia.services.SaleService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.tomcat.util.net.openssl.ciphers.Authentication;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 
-import javax.naming.AuthenticationException;
 import javax.validation.Valid;
 import java.security.Principal;
 import java.util.List;

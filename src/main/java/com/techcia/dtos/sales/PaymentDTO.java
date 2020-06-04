@@ -1,4 +1,4 @@
-package com.techcia.dtos;
+package com.techcia.dtos.sales;
 import com.mercadopago.*;
 import com.mercadopago.resources.Payment;
 import com.mercadopago.resources.datastructures.payment.Payer;

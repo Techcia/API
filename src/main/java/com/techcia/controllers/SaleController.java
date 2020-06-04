@@ -4,14 +4,12 @@ import com.mercadopago.*;
 import com.mercadopago.exceptions.MPConfException;
 import com.mercadopago.exceptions.MPException;
 import com.mercadopago.resources.Payment;
-import com.mercadopago.resources.datastructures.payment.Payer;
 import com.techcia.config.ResponseError;
 import com.techcia.constants.PaymentConstants;
 import com.techcia.constants.SaleConstants;
-import com.techcia.dtos.PaymentDTO;
-import com.techcia.dtos.SaleCheckinDTO;
+import com.techcia.dtos.sales.PaymentDTO;
+import com.techcia.dtos.sales.SaleCheckinDTO;
 import com.techcia.models.Client;
-import com.techcia.models.Company;
 import com.techcia.models.Parking;
 import com.techcia.models.Sale;
 import com.techcia.services.ClientService;
@@ -27,10 +25,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.security.Principal;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 

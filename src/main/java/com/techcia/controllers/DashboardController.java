@@ -46,7 +46,6 @@ public class DashboardController {
         Date dateInitial = Date.from( instantInitial ) ;
         Instant instantFinal = Instant.parse( finalD );
         Date dateFinal = Date.from( instantFinal ) ;
-//        List<Sale> sales = saleService.findByCompanyByDate(stock.get(), dateInitial, dateFinal);
         return ResponseEntity.ok(dashboardService.dashboardSales(stock.get(), dateInitial, dateFinal));
     }
 }

@@ -1,4 +1,4 @@
-package com.techcia.dtos;
+package com.techcia.dtos.client;
 
 import com.techcia.models.Client;
 import lombok.Data;
@@ -6,10 +6,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
-import java.util.Date;
 
 @Data
-public class ClientUpdateDTO {
+public class ClientCreateDTO {
     @NotNull(message = "Document is required")
     private String document;
     @NotNull(message = "Name is required")
@@ -19,12 +18,17 @@ public class ClientUpdateDTO {
     @NotNull(message = "Email is required")
     @Email(message = "Email needs to be valid")
     private String email;
+    @NotNull(message = "Password is required")
+    private String password;
 
-    public Client convertToEntity(Client client){
+    public Client convertToEntity(){
+        Client client = new Client();
         client.setName(this.getName());
         client.setEmail(this.getEmail());
         client.setDocument(this.getDocument());
-        client.setTypeDocument(this.typeDocument);
+        client.setTypeDocument(this.getTypeDocument());
+        client.setPassword(new BCryptPasswordEncoder().encode(this.getPassword()));
         return  client;
     }
 }
+

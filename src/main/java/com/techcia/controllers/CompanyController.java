@@ -1,20 +1,15 @@
 package com.techcia.controllers;
 
 import com.techcia.config.ResponseError;
-import com.techcia.dtos.ClientUpdateDTO;
-import com.techcia.dtos.CompanyCreateDTO;
-import com.techcia.dtos.CompanyUpdateDTO;
-import com.techcia.models.Client;
+import com.techcia.dtos.company.CompanyCreateDTO;
+import com.techcia.dtos.company.CompanyUpdateDTO;
 import com.techcia.models.Company;
-import com.techcia.models.Parking;
 import com.techcia.services.CompanyService;
-import com.techcia.services.ParkingService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;

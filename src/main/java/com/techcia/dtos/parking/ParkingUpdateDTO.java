@@ -1,4 +1,4 @@
-package com.techcia.dtos;
+package com.techcia.dtos.parking;
 
 import com.techcia.models.Parking;
 import lombok.Data;
