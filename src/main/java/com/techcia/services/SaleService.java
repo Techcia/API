@@ -63,11 +63,19 @@ public class SaleService {
         return value;
     }
 
-    public List<Sale> findByParkingByDate(Parking parking, Date initialDate, Date finalDate){
-        return saleRepository.findByParkingByDate(parking.getId(),initialDate, finalDate);
+    public List<Sale> findByParkingsByDate(List<Integer> parkings , Date initialDate, Date finalDate){
+        String parkingsString = ParkingListToString(parkings);
+        return saleRepository.findByParkingsByDate(parkingsString,initialDate, finalDate);
     }
 
-    public Map<String, Object> countAndSumValueSales(Company company, Date initialDate, Date finalDate){
-        return saleRepository.countAndSumValueSales(company.getId(), initialDate, finalDate);
+    public Map<String, Object> countAndSumValueSales(List<Integer> parkings, Date initialDate, Date finalDate){
+        String parkingsString = ParkingListToString(parkings);
+        return saleRepository.countAndSumValueSales(parkingsString, initialDate, finalDate);
+    }
+
+    private String ParkingListToString(List<Integer> parkings){
+        String parkingsString = parkings.toString();
+        parkingsString = parkingsString.substring(1, parkingsString.length()-1);
+        return parkingsString;
     }
 }
