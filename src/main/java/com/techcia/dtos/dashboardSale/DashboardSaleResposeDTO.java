@@ -11,13 +11,13 @@ public class DashboardSaleResposeDTO {
     public Double totalSalesInReal;
     public Double mediaSalesByHour;
     public Double mediaSalesByParking;
-    public List<SaleDashboardSale> parkings;
+    public List<SaleDashboardSale> sales;
 
     public void dashboardNull(){
         this.setTotalSales((long) 0);
         this.setTotalSalesInReal(0.0);
         this.setMediaSalesByParking(0.0);
         this.setMediaSalesByHour(0.0);
-        this.setParkings(new ArrayList<>());
+        this.setSales(new ArrayList<>());
     }
 }

@@ -34,7 +34,7 @@ public class DashboardService {
         dashboardSaleResposeDTO.setMediaSalesByParking(mediaByParking);
 
         //Mount parkings
-        dashboardSaleResposeDTO.setParkings(mountParkings(parkings, initialDate, finalDate));
+        dashboardSaleResposeDTO.setSales(mountParkings(parkings, initialDate, finalDate));
         return dashboardSaleResposeDTO;
     }
 
