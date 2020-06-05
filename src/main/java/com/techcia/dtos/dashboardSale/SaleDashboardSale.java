@@ -7,10 +7,10 @@ import java.util.Date;
 @Data
 public class SaleDashboardSale {
     private Double value;
-    private Date dataPay;
+    private Date date;
 
     public void convertSaleInEntity(Sale sale){
-        this.setDataPay(sale.getDataPay());
+        this.setDate(sale.getDataPay());
         this.setValue(sale.getValue());
     }
 }
