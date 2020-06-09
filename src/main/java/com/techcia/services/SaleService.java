@@ -7,6 +7,9 @@ import com.techcia.models.Parking;
 import com.techcia.models.Sale;
 import com.techcia.repositories.SaleRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -77,5 +80,10 @@ public class SaleService {
         String parkingsString = parkings.toString();
         parkingsString = parkingsString.substring(1, parkingsString.length()-1);
         return parkingsString;
+    }
+
+    public Page<Sale> findByDateByCompany(Company company, Date initialDate, Date finalDate, int page, int size) {
+        PageRequest pageRequest = PageRequest.of(page, size, Sort.Direction.DESC, "id");
+        return saleRepository.findByDateByCompany(company.getId(), initialDate, finalDate, pageRequest);
     }
 }

@@ -10,6 +10,7 @@ import com.techcia.constants.SaleConstants;
 import com.techcia.dtos.sales.PaymentDTO;
 import com.techcia.dtos.sales.SaleCheckinDTO;
 import com.techcia.models.Client;
+import com.techcia.models.Company;
 import com.techcia.models.Parking;
 import com.techcia.models.Sale;
 import com.techcia.services.ClientService;
@@ -18,6 +19,7 @@ import com.techcia.services.ParkingService;
 import com.techcia.services.SaleService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -25,6 +27,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.security.Principal;
+import java.time.Instant;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -168,5 +172,39 @@ public class SaleController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
         }
         return ResponseEntity.ok(saleService.findByClient(stock.get()));
+    }
+
+    @PreAuthorize("hasRole('COMPANY')")
+    @GetMapping("/search")
+    public ResponseEntity findByDateByCompany(@RequestParam("initialDate") String initialDate, @RequestParam("finalDate") String finalDate,
+            @RequestParam(
+                    value = "page",
+                    required = false,
+                    defaultValue = "0") int page,
+            @RequestParam(
+                    value = "size",
+                    required = false,
+                    defaultValue = "10") int size, Principal principal) {
+
+        if(initialDate == null || finalDate == null || initialDate == "" || finalDate == ""){
+            ResponseError response = new ResponseError("Data inicial e Data final é obrigatório");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+        }
+
+        Optional<Company> stock = companyService.findByEmail(principal.getName());
+        if(!stock.isPresent()){
+            ResponseError response = new ResponseError("Token inválido");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+        }
+
+
+
+        Instant instantInitial = Instant.parse(initialDate);
+        Date dateInitial = Date.from( instantInitial );
+        Instant instantFinal = Instant.parse(finalDate);
+        Date dateFinal = Date.from( instantFinal );
+
+        return ResponseEntity.ok(saleService.findByDateByCompany(stock.get(), dateInitial, dateFinal, page, size));
+
     }
 }

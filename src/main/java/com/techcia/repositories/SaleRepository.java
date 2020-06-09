@@ -5,9 +5,10 @@ import com.techcia.models.Company;
 import com.techcia.models.Sale;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.data.repository.query.Param;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -17,6 +18,8 @@ public interface SaleRepository extends JpaRepository<Sale, Long> {
 
     List<Sale> findByClientOrderByIdDesc(Client client);
 
+
+
     @Query(value = "SELECT sum(value) as 'totalSalesInReal', count(*) as 'totalSales' FROM sale s\n" +
             "where s.parking_id in (:parkings) AND s.checkin >= :initialDate AND s.checkout <= :finalDate", nativeQuery = true)
     Map<String, Object> countAndSumValueSales(@Param("parkings") String parkings, @Param("initialDate") Date initialDate, @Param("finalDate") Date finalDate);
@@ -25,4 +28,19 @@ public interface SaleRepository extends JpaRepository<Sale, Long> {
             "WHERE parking_id in (:parkings) AND s.checkin >= :initialDate AND s.checkout <= :finalDate\n" +
             "group by year(s.data_pay), month(s.data_pay), day(data_pay)", nativeQuery = true)
     List<Sale> findByParkingsByDate(@Param("parkings") String parkings, @Param("initialDate") Date initialDate,  @Param("finalDate") Date finalDate);
+
+
+
+    @Query(value = "SELECT s.* FROM sale s\n" +
+            "INNER JOIN parking p ON p.id = s.parking_id\n" +
+            "INNER JOIN company c ON c.id = p.company_id\n" +
+            "WHERE c.id = :companyId AND s.checkin >= :initialDate\n" +
+            "AND (s.checkout <= :endDate OR s.checkout IS NULL)",
+            countQuery = "SELECT count(*) FROM sale s\n" +
+                    "INNER JOIN parking p ON p.id = s.parking_id\n" +
+                    "INNER JOIN company c ON c.id = p.company_id\n" +
+                    "WHERE c.id = :companyId AND s.checkin >= :initialDate\n" +
+                    "AND (s.checkout <= :endDate OR s.checkout IS NULL)",
+            nativeQuery = true)
+    Page<Sale> findByDateByCompany(@Param("companyId") Long companyId, @Param("initialDate") Date initialDate, @Param("endDate") Date endDate, Pageable pageable);
 }
