@@ -48,6 +48,7 @@ public class ParkingCreateDTO {
         parking.setNumberOfVacancies(this.getNumberOfVacancies());
         parking.setCompany(company);
         parking.setValuePerHour(this.valuePerHour);
+        parking.setOccupiedPlaces(0);
         return parking;
     }
 }

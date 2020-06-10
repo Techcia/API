@@ -34,6 +34,8 @@ public class Parking {
     @Column(nullable = false)
     private int numberOfVacancies;
     @Column(nullable = false)
+    private int occupiedPlaces;
+    @Column(nullable = false)
     private double valuePerHour;
     @CreationTimestamp
     @Column(nullable = false, updatable = false)

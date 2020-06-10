@@ -48,11 +48,14 @@ public class SaleController {
     public ResponseEntity checkin(@Valid @RequestBody SaleCheckinDTO saleCheckinDTO, Principal principal){
         Optional<Parking> stockParking = parkingService.findById(saleCheckinDTO.getParkingId());
         if(!stockParking.isPresent()){
-            ResponseError response = new ResponseError("O estacionamento não encontrado");
+            ResponseError response = new ResponseError("O estacionamento não foi encontrado");
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
         }
 
-        Sale sale = saleCheckinDTO.convertToEntity(stockParking.get());
+        Parking parking = stockParking.get();
+        parking.setOccupiedPlaces(parking.getOccupiedPlaces() + 1);
+        parkingService.save(parking);
+        Sale sale = saleCheckinDTO.convertToEntity(parking);
         return ResponseEntity.ok(saleService.save(sale));
     }
 
@@ -131,6 +134,11 @@ public class SaleController {
             ResponseError response = new ResponseError("O ticket já realizou checkout");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
         }
+
+        Parking parking = stockSale.get().getParking();
+        parking.setOccupiedPlaces(parking.getOccupiedPlaces() - 1);
+        parkingService.save(parking);
+
         return ResponseEntity.ok(saleService.checkout(sale));
     }
 
