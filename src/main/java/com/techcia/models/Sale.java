@@ -30,6 +30,6 @@ public class Sale {
     @JoinColumn (name="parking_id",referencedColumnName="id",nullable=false)
     Parking parking;
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn (name="client_id",referencedColumnName="id")
+    @JoinColumn (name="client_id",referencedColumnName="id", nullable = true, updatable = true)
     Client client;
 }
