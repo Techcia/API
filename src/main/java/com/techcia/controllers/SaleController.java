@@ -196,9 +196,6 @@ public class SaleController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
         }
 
-        System.out.println(parkings);
-        System.out.println(nameClient);
-
         Instant instantInitial = Instant.parse(initialDate);
         Date dateInitial = Date.from( instantInitial );
         Instant instantFinal = Instant.parse(finalDate);

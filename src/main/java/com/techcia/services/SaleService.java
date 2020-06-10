@@ -68,12 +68,12 @@ public class SaleService {
 
     public List<Sale> findByParkingsByDate(List<Integer> parkings , Date initialDate, Date finalDate){
         String parkingsString = ParkingListToString(parkings);
-        return saleRepository.findByParkingsByDate(parkingsString,initialDate, finalDate);
+        return saleRepository.findByParkingsByDate(parkings,initialDate, finalDate);
     }
 
     public Map<String, Object> countAndSumValueSales(List<Integer> parkings, Date initialDate, Date finalDate){
         String parkingsString = ParkingListToString(parkings);
-        return saleRepository.countAndSumValueSales(parkingsString, initialDate, finalDate);
+        return saleRepository.countAndSumValueSales(parkings, initialDate, finalDate);
     }
 
     private String ParkingListToString(List<Integer> parkings){
@@ -83,7 +83,9 @@ public class SaleService {
     }
 
     public Page<Sale> searchSale(String nameClient, String parkings, Company company, Date initialDate, Date finalDate, int page, int size) {
-        PageRequest pageRequest = PageRequest.of(page, size, Sort.Direction.DESC, "id");
-        return saleRepository.searchSale(nameClient, parkings, company.getId(), initialDate, finalDate, pageRequest);
+        PageRequest pageRequest = PageRequest.of(page, size);
+        String[] output = parkings.split(",");
+        List<String> listParkings = Arrays.asList(output);
+        return saleRepository.searchSale(nameClient, listParkings, company.getId(), initialDate, finalDate, pageRequest);
     }
 }
