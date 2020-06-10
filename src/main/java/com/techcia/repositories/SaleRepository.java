@@ -37,7 +37,7 @@ public interface SaleRepository extends JpaRepository<Sale, Long> {
             "INNER JOIN client cli ON cli.id = s.client_id\n" +
             "WHERE c.id = :companyId AND s.checkin >= :initialDate\n" +
             "AND (s.checkout <= :endDate OR s.checkout IS NULL) AND p.id IN (:parkings) AND cli.name like %:nameClient% ORDER BY s.id DESC \n-- #pageable\n",
-            countQuery = "SELECT count(1) FROM sale s\n" +
+            countQuery = "SELECT count(*) FROM sale s\n" +
                     "INNER JOIN parking p ON p.id = s.parking_id\n" +
                     "INNER JOIN company c ON c.id = p.company_id\n" +
                     "INNER JOIN client cli ON cli.id = s.client_id\n" +
