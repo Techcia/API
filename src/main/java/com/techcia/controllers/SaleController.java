@@ -62,27 +62,6 @@ public class SaleController {
     @PreAuthorize("hasRole('CLIENT')")
     @GetMapping("/generate_pay/{id}")
     public ResponseEntity generatePay(@PathVariable Long id, Principal principal){
-        Optional<Sale> stockSale = saleService.findById(id);
-        if(!stockSale.isPresent()){
-            ResponseError response = new ResponseError("O ticket não foi encontrado");
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
-        }
-        Sale sale = stockSale.get();
-        if(sale.getStatus().equals(SaleConstants.FECHADO)){
-            ResponseError response = new ResponseError("O ticket já realizou checkout");
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
-        }
-        if(sale.getStatus().equals(SaleConstants.PAGO)){
-            ResponseError response = new ResponseError("O ticket já se encontra pago");
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
-        }
-        return ResponseEntity.ok(saleService.generatePay(sale));
-    }
-
-
-    @PreAuthorize("hasRole('CLIENT')")
-    @PostMapping("/pay/{id}")
-    public ResponseEntity payment(@Valid @RequestBody PaymentDTO paymentDTO, @PathVariable Long id, Principal principal) throws MPException, MPConfException {
         Optional<Client> stockClient = clientService.findByEmail(principal.getName());
         if(!stockClient.isPresent()){
             ResponseError response = new ResponseError("Token inválido");
@@ -103,6 +82,29 @@ public class SaleController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
         }
         sale.setClient(stockClient.get());
+        return ResponseEntity.ok(saleService.generatePay(sale));
+    }
+
+
+    @PreAuthorize("hasRole('CLIENT')")
+    @PostMapping("/pay/{id}")
+    public ResponseEntity payment(@Valid @RequestBody PaymentDTO paymentDTO, @PathVariable Long id, Principal principal) throws MPException, MPConfException {
+
+        Optional<Sale> stockSale = saleService.findById(id);
+        if(!stockSale.isPresent()){
+            ResponseError response = new ResponseError("O ticket não foi encontrado");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+        }
+        Sale sale = stockSale.get();
+        if(sale.getStatus().equals(SaleConstants.FECHADO)){
+            ResponseError response = new ResponseError("O ticket já realizou checkout");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+        }
+        if(sale.getStatus().equals(SaleConstants.PAGO)){
+            ResponseError response = new ResponseError("O ticket já se encontra pago");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+        }
+
 
         MercadoPago.SDK.setAccessToken(PaymentConstants.ENV_ACCESS_TOKEN);
         Payment payment = paymentDTO.convertToEntity();
