@@ -14,9 +14,8 @@ public class SaleCheckinDTO {
     @NotNull(message = "Parkinkg id is required")
     private Long parkingId;
 
-    public Sale convertToEntity(Client client, Parking parking){
+    public Sale convertToEntity(Parking parking){
         Sale sale = new Sale();
-        sale.setClient(client);
         sale.setParking(parking);
         sale.setStatus(SaleConstants.ABERTO);
         return sale;
