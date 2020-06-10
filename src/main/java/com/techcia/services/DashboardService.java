@@ -17,6 +17,10 @@ public class DashboardService {
 
     public DashboardSaleResposeDTO dashboardSales(Date initialDate, Date finalDate, List<Integer> parkings){
         DashboardSaleResposeDTO dashboardSaleResposeDTO = new DashboardSaleResposeDTO();
+        if(parkings.size() <= 0){
+            dashboardSaleResposeDTO.dashboardNull();
+            return dashboardSaleResposeDTO;
+        }
 
         // Find total and sum value sales and parking
         Map<String, Object> countAndSumValueSales = saleService.countAndSumValueSales(parkings, initialDate, finalDate);
