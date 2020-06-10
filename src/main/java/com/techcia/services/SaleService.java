@@ -82,8 +82,8 @@ public class SaleService {
         return parkingsString;
     }
 
-    public Page<Sale> findByDateByCompany(Company company, Date initialDate, Date finalDate, int page, int size) {
+    public Page<Sale> searchSale(String nameClient, String parkings, Company company, Date initialDate, Date finalDate, int page, int size) {
         PageRequest pageRequest = PageRequest.of(page, size, Sort.Direction.DESC, "id");
-        return saleRepository.findByDateByCompany(company.getId(), initialDate, finalDate, pageRequest);
+        return saleRepository.searchSale(nameClient, parkings, company.getId(), initialDate, finalDate, pageRequest);
     }
 }

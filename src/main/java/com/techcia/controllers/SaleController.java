@@ -176,15 +176,14 @@ public class SaleController {
 
     @PreAuthorize("hasRole('COMPANY')")
     @GetMapping("/search")
-    public ResponseEntity findByDateByCompany(@RequestParam("initialDate") String initialDate, @RequestParam("finalDate") String finalDate,
-            @RequestParam(
-                    value = "page",
-                    required = false,
-                    defaultValue = "0") int page,
-            @RequestParam(
-                    value = "size",
-                    required = false,
-                    defaultValue = "10") int size, Principal principal) {
+    public ResponseEntity findByDateByCompany(
+            @RequestParam(value = "nameClient", required = false, defaultValue = "") String nameClient,
+            @RequestParam(value = "parkings", required = false, defaultValue = "") String parkings,
+            @RequestParam("initialDate") String initialDate,
+            @RequestParam("finalDate") String finalDate,
+            @RequestParam(value = "page",  required = false, defaultValue = "0") int page,
+            @RequestParam(value = "size", required = false, defaultValue = "10") int size,
+            Principal principal) {
 
         if(initialDate == null || finalDate == null || initialDate == "" || finalDate == ""){
             ResponseError response = new ResponseError("Data inicial e Data final é obrigatório");
@@ -197,14 +196,15 @@ public class SaleController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
         }
 
-
+        System.out.println(parkings);
+        System.out.println(nameClient);
 
         Instant instantInitial = Instant.parse(initialDate);
         Date dateInitial = Date.from( instantInitial );
         Instant instantFinal = Instant.parse(finalDate);
         Date dateFinal = Date.from( instantFinal );
 
-        return ResponseEntity.ok(saleService.findByDateByCompany(stock.get(), dateInitial, dateFinal, page, size));
+        return ResponseEntity.ok(saleService.searchSale(nameClient, parkings, stock.get(), dateInitial, dateFinal, page, size));
 
     }
 }

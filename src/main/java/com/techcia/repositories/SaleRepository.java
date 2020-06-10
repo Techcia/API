@@ -34,13 +34,21 @@ public interface SaleRepository extends JpaRepository<Sale, Long> {
     @Query(value = "SELECT s.* FROM sale s\n" +
             "INNER JOIN parking p ON p.id = s.parking_id\n" +
             "INNER JOIN company c ON c.id = p.company_id\n" +
+            "INNER JOIN client cli ON cli.id = s.client_id\n" +
             "WHERE c.id = :companyId AND s.checkin >= :initialDate\n" +
-            "AND (s.checkout <= :endDate OR s.checkout IS NULL)",
+            "AND (s.checkout <= :endDate OR s.checkout IS NULL) AND p.id IN (:parkings) AND cli.name like %:nameClient%",
             countQuery = "SELECT count(*) FROM sale s\n" +
                     "INNER JOIN parking p ON p.id = s.parking_id\n" +
                     "INNER JOIN company c ON c.id = p.company_id\n" +
+                    "INNER JOIN client cli ON cli.id = s.client_id\n" +
                     "WHERE c.id = :companyId AND s.checkin >= :initialDate\n" +
-                    "AND (s.checkout <= :endDate OR s.checkout IS NULL)",
+                    "AND (s.checkout <= :endDate OR s.checkout IS NULL) AND p.id IN (:parkings) AND cli.name like %:nameClient%",
             nativeQuery = true)
-    Page<Sale> findByDateByCompany(@Param("companyId") Long companyId, @Param("initialDate") Date initialDate, @Param("endDate") Date endDate, Pageable pageable);
+    Page<Sale> searchSale(
+            @Param("nameClient") String nameClient,
+            @Param("parkings") String parkings,
+            @Param("companyId") Long companyId,
+            @Param("initialDate") Date initialDate,
+            @Param("endDate") Date endDate,
+            Pageable pageable);
 }
